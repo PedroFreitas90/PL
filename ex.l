@@ -8,14 +8,17 @@
   int par=0;
   int cat = 0;
 char filename[200];
-GTree * categorias; 
+char* linke;
+GTree * categorias;
 FILE * out;
+FILE * ind;
 GTree * aut;
 
 char* categoria;
 char refs[200];
 
 void inserir(char* c,char filename[200]);
+void remove_espacos(char filename [200]);
 
 %}
 
@@ -51,8 +54,12 @@ fprintf(out,"<h1>%s</h1>\n",filename);
 <AUTOR>[=][^\n|}]* {fprintf(out,": %s</p>\n",yytext+1);}
 <AUTOR>"}}" {BEGIN CAT;par++;fprintf(out,"</ul></body></html>");fclose(out);}
 
-<CAT>"[["[Cc]"ategoria:"[^]]* {cat++;categoria= strdup(yytext+12);sprintf(refs,"<li><a href=%s>  </a></li>\n",filename);inserir(categoria,refs); /*prin   tf("%s\n",categoria);*/}
-<CAT>"</text>" {BEGIN PAGE;} 
+<CAT>"[["[Cc]"ategoria:"[^]]* {cat++;categoria=strdup(yytext+12);
+remove_espacos(filename);
+sprintf(refs,"<li><a href=%s> %s </a></li>\n\n",linke,filename);
+inserir(categoria,refs); /*prin   tf("%s\n",categoria);*/}
+
+<CAT>"</text>" {BEGIN PAGE;}
 
 <ATRIBUTO>[=][^\n]* {BEGIN AUTOR;}
 <*>(.|\n) {;}
@@ -60,16 +67,36 @@ fprintf(out,"<h1>%s</h1>\n",filename);
 %%
 
 gboolean printsons(gpointer key, gpointer value, gpointer data){
-    printf("    Value Key-> %s \n",key);
-    printf("        Value value-> %s \n",value);
+    //printf("    Value Key-> %s \n",key);
+    //printf("        Value value-> %s \n",value);
+	char * aux=(char *) value;
+FILE * ind = (FILE *) data;
+    fprintf(ind,"%s",value);
     return FALSE;
+}
+
+gboolean indiceCategorias(gpointer key, gpointer value, gpointer data){
+    FILE * ind = (FILE *) data;
+     char cat[200];
+    sprintf(cat,"%s.html",key);
+    remove_espacos(cat);
+    sprintf(refs,"<li><a href=%s> %s </a></li>\n\n",linke,cat);
+    fprintf(ind,"%s",refs);
+    return FALSE;
+
+
 }
 
 
 gboolean print(gpointer key, gpointer value, gpointer data){
     printf("KEY -> %s \n",key);
     GTree* aux = (GTree*) value;
-    g_tree_foreach(aux,printsons,NULL);
+	FILE * ind = (FILE *) data;
+char aux2 [200];
+sprintf(aux2,"%s.html",key);
+	ind=fopen(aux2,"w");
+    g_tree_foreach(aux,printsons,ind);
+	fclose(ind);
     return FALSE;
 
 }
@@ -89,6 +116,24 @@ void inserir(char* c,char filename[200]){
     }
 }
 
+void remove_espacos(char filename [200]){
+
+	 linke = (char*)malloc(sizeof(char)*200);
+int i;
+int j=0;
+for(i=0;filename[i]!='\0';i++){
+	if(filename[i]!=' '){
+		linke[j++]=filename[i];
+	}
+	else{ linke[j++]='%';
+	      linke[j++]='2';
+	      linke[j++]='0';
+	}
+
+}
+linke[j]='\0';
+
+}
 
 
 
@@ -99,13 +144,15 @@ int yywrap(){
 int main(int argc,char * argv[]){
     printf("Início da filtragem\n");
     categorias = g_tree_new(strcmp);
-
     yylex();
 
     //printf(" tem %d\n paginas e %d autores e %d parenteses\n",conta,autor,par);
     printf("Fim da filtragem\n");
     printf("Olá\n");
-    g_tree_foreach(categorias,print,NULL);
+    g_tree_foreach(categorias,print,ind);
+    ind = fopen("Categorias.html","w");
+    g_tree_foreach(categorias,indiceCategorias,ind);
+fclose(ind);
 
     return 0;
 }
