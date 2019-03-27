@@ -7,7 +7,14 @@
   int autor=0;
   int par=0;
   int cat = 0;
-char filename[200];
+  int n_autores=1;
+  int flag=0;
+char filename[100];
+char username[50];
+char userId[10];
+char id[10];
+char timestamp[100];
+char title[30];
 char* linke;
 GTree * categorias;
 FILE * out;
@@ -25,7 +32,7 @@ void remove_espacos(char filename [200]);
 
 
 
-%x PAGE AUTOR ATRIBUTO BIO CAT
+%x PAGE AUTOR ATRIBUTO BIO CAT CONTRIBUIDOR REVISION
 
 
 
@@ -34,29 +41,47 @@ void remove_espacos(char filename [200]);
 
 
 
-<PAGE>"<title>"[^<]* {sprintf(filename,"%s.html",yytext+7);}
-<PAGE>">{{Autor" {BEGIN AUTOR;autor++;out=fopen(filename,"w");fprintf(out,"<html><head><meta charset='UTF-8'/>\n </head><body><ul>\n");
+<PAGE>"<title>"[^<]* {sprintf(filename,"post-%d.html",n_autores),sprintf(title,"%s",yytext+7);}
+<PAGE>"<id>"[^<]*   {sprintf(id,"%s",yytext+4);}
+<PAGE>"<revision>" {BEGIN REVISION;}
+<PAGE>"<timestamp>"[^<]* {sprintf(timestamp,"%s",yytext+11);}
+<PAGE>"<contributor>" {BEGIN CONTRIBUIDOR;}
+<PAGE>">{{Autor" {BEGIN AUTOR;n_autores++;out=fopen(filename,"w");fprintf(out,"<html><head><meta charset='UTF-8'/>\n </head><body><ul>\n");
 fprintf(out,"<h1>%s</h1>\n",filename);
+fprintf(out,"<p><b>Id</b>"); fprintf(out,": %s</p>\n",id);
+fprintf(out,"<p><b>timestamp</b>"); fprintf(out,": %s</p>\n",timestamp);
+if(flag){
+fprintf(out,"<p><b>Contribuidor :</b></p>");
+fprintf(out,"<p><b>Username</b>"); fprintf(out,": %s</p>\n",username);
+fprintf(out,"<p><b>UserId</b>"); fprintf(out,": %s</p>\n",userId);
+flag=0;
+}
 }
 <PAGE>"</page>" {BEGIN INITIAL;}
-
+<REVISION>"<id>" {BEGIN PAGE;}
+<CONTRIBUIDOR>"<username>"[^<]* {sprintf(username,"%s",yytext+10);flag=1;}
+<CONTRIBUIDOR>"<id>"[^<]* {sprintf(userId,"%s",yytext+4);}
+<CONTRIBUIDOR>"contributor" {BEGIN PAGE;}
 <AUTOR>"Nome" {fprintf(out,"<p><b>%s</b>",yytext);}
+<AUTOR>"Nombre" {fprintf(out,"<p><b>Nome</b>");}
 <AUTOR>"Wikipedia" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>"Wikicommons" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>"Foto" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>"Gutenberg" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>"Cervantes" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>"Cor" {fprintf(out,"<p><b>%s</b>",yytext);}
+<AUTOR>"Color" {fprintf(out,"<p><b>Cor</b>");}
 <AUTOR>"Wikisource" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>"DominioPu" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>"DomiPubli" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>"EbooksG" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>[=][^\n|}]* {fprintf(out,": %s</p>\n",yytext+1);}
-<AUTOR>"}}" {BEGIN CAT;par++;fprintf(out,"</ul></body></html>");fclose(out);}
-
+<AUTOR>"}}" {BEGIN BIO;par++;}
+<BIO>[^\*]* {fprintf(out,"%s",yytext);BEGIN CAT;fprintf(out,"</ul></body></html>");
+fclose(out);}
 <CAT>"[["[Cc]"ategoria:"[^]]* {cat++;categoria=strdup(yytext+12);
 remove_espacos(filename);
-sprintf(refs,"<li><a href=%s> %s </a></li>\n\n",linke,filename);
+sprintf(refs,"<li><a href=%s> %s </a></li>\n\n",linke,title);
 inserir(categoria,refs); /*prin   tf("%s\n",categoria);*/}
 
 <CAT>"</text>" {BEGIN PAGE;}
