@@ -9,6 +9,7 @@
   int cat = 0;
   int n_autores=1;
   int flag=0;
+  int numcat = 0;
 char filename[100];
 char username[50];
 char userId[10];
@@ -19,6 +20,7 @@ char* linke;
 GTree * categorias;
 FILE * out;
 FILE * ind;
+FILE * estatisticas;
 GTree * aut;
 
 char* categoria;
@@ -173,11 +175,13 @@ int main(int argc,char * argv[]){
 
     //printf(" tem %d\n paginas e %d autores e %d parenteses\n",conta,autor,par);
     printf("Fim da filtragem\n");
-    printf("Olá\n");
     g_tree_foreach(categorias,print,ind);
     ind = fopen("Categorias.html","w");
+    estatisticas=fopen("Estatísticas.html","w");
     g_tree_foreach(categorias,indiceCategorias,ind);
+    cat = g_tree_nnodes(categorias);
 fclose(ind);
+fclose(estatisticas);
 
     return 0;
 }
