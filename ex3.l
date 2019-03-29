@@ -9,6 +9,7 @@
     int flag=0;
     int conta_quotes=0;
     int conta_quotes_autor=0;
+    int conta_autores= 0;
     void insereAutor(char * autor);
 %}
 
@@ -38,6 +39,7 @@ void insereAutor(char * autor){
         x = (int *) malloc(sizeof(int));
         *x = 1;
         g_tree_insert(aux,autor,x);
+        conta_autores++;
     }
     else{
         x = (int *) t;
@@ -76,6 +78,7 @@ int main(){
       g_tree_foreach(aux,preencheTabela, &conta);
   fprintf(estatisticas,"</table>");
     fprintf(estatisticas,"<p><b> Existem %d quotes das quais %d têm autor</b></p>",conta_quotes,conta_quotes_autor);
+    fprintf(estatisticas,"<p><b> Existem no total %d autores</b></p>",conta_autores);
     fprintf(estatisticas,"</table></body></html>");
     fclose(estatisticas);
 

@@ -501,9 +501,10 @@ char *yytext;
     int flag=0;
     int conta_quotes=0;
     int conta_quotes_autor=0;
+    int conta_autores= 0;
     void insereAutor(char * autor);
 
-#line 507 "lex.yy.c"
+#line 508 "lex.yy.c"
 
 #define INITIAL 0
 #define AUTOR 1
@@ -689,9 +690,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 18 "ex3.l"
+#line 19 "ex3.l"
 
-#line 695 "lex.yy.c"
+#line 696 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -776,52 +777,52 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 19 "ex3.l"
+#line 20 "ex3.l"
 {BEGIN PAGE;}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 20 "ex3.l"
+#line 21 "ex3.l"
 {nome=strdup(yytext+7);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 21 "ex3.l"
+#line 22 "ex3.l"
 {BEGIN AUTOR;flag=1;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 22 "ex3.l"
+#line 23 "ex3.l"
 {BEGIN QUOTE;conta_quotes++;conta_quotes_autor++;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 23 "ex3.l"
+#line 24 "ex3.l"
 {BEGIN INITIAL;flag=0;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 24 "ex3.l"
+#line 25 "ex3.l"
 {if(flag)  {BEGIN AUTOR; insereAutor(nome);} else {BEGIN PAGE;}}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 25 "ex3.l"
+#line 26 "ex3.l"
 {BEGIN QUOTE;conta_quotes++;}
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 26 "ex3.l"
+#line 27 "ex3.l"
 {;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 27 "ex3.l"
+#line 28 "ex3.l"
 ECHO;
 	YY_BREAK
-#line 825 "lex.yy.c"
+#line 826 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(AUTOR):
 case YY_STATE_EOF(NOME):
@@ -1822,7 +1823,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 27 "ex3.l"
+#line 28 "ex3.l"
 
 
 
@@ -1838,6 +1839,7 @@ void insereAutor(char * autor){
         x = (int *) malloc(sizeof(int));
         *x = 1;
         g_tree_insert(aux,autor,x);
+        conta_autores++;
     }
     else{
         x = (int *) t;
@@ -1876,6 +1878,7 @@ int main(){
       g_tree_foreach(aux,preencheTabela, &conta);
   fprintf(estatisticas,"</table>");
     fprintf(estatisticas,"<p><b> Existem %d quotes das quais %d têm autor</b></p>",conta_quotes,conta_quotes_autor);
+    fprintf(estatisticas,"<p><b> Existem %d autores</b></p>",conta_autores);
     fprintf(estatisticas,"</table></body></html>");
     fclose(estatisticas);
 
