@@ -8,6 +8,7 @@
     char *nome;
     int flag=0;
     int conta_quotes=0;
+    int conta_quotes_autor=0;
     void insereAutor(char * autor);
 %}
 
@@ -18,7 +19,7 @@
 "<page>"             {BEGIN PAGE;}
 <PAGE>\<title>[^<]* {nome=strdup(yytext+7);}
 <PAGE>">{{Autor"                      {BEGIN AUTOR;flag=1;}
-<AUTOR>[*][ ]*[']*"&quot;"           {BEGIN QUOTE;conta_quotes++;}
+<AUTOR>[*][ ]*[']*"&quot;"           {BEGIN QUOTE;conta_quotes++;conta_quotes_autor++;}
 <AUTOR>"[["[Cc]"ategoria:"    {BEGIN INITIAL;flag=0;}
 <QUOTE>[^&\n]* {if(flag)  {BEGIN AUTOR; insereAutor(nome);} else {BEGIN PAGE;}}
 <PAGE>[*][ ]*[']*"&quot;" {BEGIN QUOTE;conta_quotes++;}
@@ -48,10 +49,6 @@ void insereAutor(char * autor){
 gboolean preencheTabela(gpointer key, gpointer value, gpointer data){
     char * autor = (char * ) key;
     int * n = (int *) value;
-    int *aux = (int *) data;
-    int x = *aux;
-    x=x+(*n);
-    *aux=x;
     fprintf(estatisticas, "<tr>");
     fprintf(estatisticas, "<td>%s</td>\n",autor);
     fprintf(estatisticas, "<td>%d</td>",*n);
@@ -78,9 +75,7 @@ int main(){
     yylex();
       g_tree_foreach(aux,preencheTabela, &conta);
   fprintf(estatisticas,"</table>");
-    int a= *conta;
-    int x = conta_quotes-a;
-    fprintf(estatisticas,"<p><b> Existem %d quotes das quais %d não tem autor</b></p>",conta_quotes,x);
+    fprintf(estatisticas,"<p><b> Existem %d quotes das quais %d têm autor</b></p>",conta_quotes,conta_quotes_autor);
     fprintf(estatisticas,"</table></body></html>");
     fclose(estatisticas);
 
