@@ -33,7 +33,7 @@ void remove_espacos(char filename [200]);
 
 
 
-%x PAGE AUTOR ATRIBUTO BIO CAT CONTRIBUIDOR REVISION
+%x PAGE AUTOR BIO CAT CONTRIBUIDOR REVISION
 
 
 
@@ -83,11 +83,10 @@ fclose(out);}
 <CAT>"[["[Cc]"ategoria:"[^]]* {cat++;categoria=strdup(yytext+12);
 remove_espacos(filename);
 sprintf(refs,"<li><a href=%s> %s </a></li>\n\n",linke,title);
-inserir(categoria,refs); /*prin   tf("%s\n",categoria);*/}
+inserir(categoria,refs);}
 
 <CAT>"</text>" {BEGIN PAGE;}
 
-<ATRIBUTO>[=][^\n]* {BEGIN AUTOR;}
 <*>(.|\n) {;}
 
 %%
@@ -115,7 +114,6 @@ gboolean indiceCategorias(gpointer key, gpointer value, gpointer data){
 
 
 gboolean print(gpointer key, gpointer value, gpointer data){
-    //printf("KEY -> %s \n",key);
     GTree* aux = (GTree*) value;
     gint a = g_tree_nnodes(aux);
     int x = (int) a;
@@ -124,8 +122,8 @@ gboolean print(gpointer key, gpointer value, gpointer data){
     fprintf(estatisticas,"<td>%d</td>",x);
     fprintf(estatisticas,"</tr>");
 	FILE * ind = (FILE *) data;
-char aux2 [200];
-sprintf(aux2,"%s.html",key);
+    char aux2 [200];
+    sprintf(aux2,"%s.html",key);
 	ind=fopen(aux2,"w");
     g_tree_foreach(aux,printsons,ind);
 	fclose(ind);
