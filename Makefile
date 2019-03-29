@@ -15,3 +15,10 @@ ex2: ex2.l
 ex3: ex3.l
 		flex ex3.l
 		cc $(CFLAGS) -Wall -o ex3 lex.yy.c $(LFLAGS)
+
+clean-ex1:
+		rm ex1
+		rm citacoes.html
+clean-ex3:
+		rm ex3
+		rm citacoes.html
