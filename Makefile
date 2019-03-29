@@ -21,4 +21,4 @@ clean-ex1:
 		rm citacoes.html
 clean-ex3:
 		rm ex3
-		rm citacoes.html
+		rm estatisticas.html
