@@ -9,16 +9,17 @@
   int cat = 0;
   int n_autores=1;
   int flag=0;
-char filename[100];
-char username[50];
+char filename[200];
+char username[128];
 char userId[10];
 char id[10];
 char timestamp[100];
-char title[30];
+char title[250];
 char* linke;
 GTree * categorias;
 FILE * out;
 FILE * ind;
+FILE * estatisticas;
 GTree * aut;
 
 char* categoria;
@@ -92,18 +93,18 @@ inserir(categoria,refs); /*prin   tf("%s\n",categoria);*/}
 %%
 
 gboolean printsons(gpointer key, gpointer value, gpointer data){
-    //printf("    Value Key-> %s \n",key);
-    //printf("        Value value-> %s \n",value);
+
 	char * aux=(char *) value;
 FILE * ind = (FILE *) data;
-    fprintf(ind,"%s",value);
+    fprintf(ind,"%s",aux);
     return FALSE;
 }
 
 gboolean indiceCategorias(gpointer key, gpointer value, gpointer data){
     FILE * ind = (FILE *) data;
      char cat[200];
-    sprintf(cat,"%s.html",key);
+      char* KEY = (char *) key;
+    sprintf(cat,"%s.html",KEY);
     remove_espacos(cat);
     sprintf(refs,"<li><a href=%s> %s </a></li>\n\n",linke,cat);
     fprintf(ind,"%s",refs);
@@ -116,6 +117,12 @@ gboolean indiceCategorias(gpointer key, gpointer value, gpointer data){
 gboolean print(gpointer key, gpointer value, gpointer data){
     printf("KEY -> %s \n",key);
     GTree* aux = (GTree*) value;
+    gint a = g_tree_nnodes(aux);
+    int x = (int) a;
+    fprintf(estatisticas,"<tr>");
+    fprintf(estatisticas,"<td>%s</td>\n",key);
+    fprintf(estatisticas,"<td>%d</td>",x);
+    fprintf(estatisticas,"</tr>");
 	FILE * ind = (FILE *) data;
 char aux2 [200];
 sprintf(aux2,"%s.html",key);
@@ -140,6 +147,15 @@ void inserir(char* c,char filename[200]){
         g_tree_insert(t,strdup(filename),strdup(filename));
     }
 }
+void table(){
+  fprintf(estatisticas,"<style>table, th, td {border: 1px solid black;}");
+  fprintf(estatisticas,"</style></head><body>\n");
+  fprintf(estatisticas,"<table style=\"width:100%\">");
+  fprintf(estatisticas,"<tr>\n");
+  fprintf(estatisticas,"<th>Categoria</th>\n<th>Numero de Autores</th>\n");
+  fprintf(estatisticas,"</tr>\n");
+}
+
 
 void remove_espacos(char filename [200]){
 
@@ -165,19 +181,23 @@ linke[j]='\0';
 int yywrap(){
     return 1;
 }
-
 int main(int argc,char * argv[]){
+    ind = fopen("Categorias.html","w");
+    estatisticas=fopen("Estatisticas2.html","w");
+    table();
     printf("Início da filtragem\n");
     categorias = g_tree_new(strcmp);
     yylex();
-
-    //printf(" tem %d\n paginas e %d autores e %d parenteses\n",conta,autor,par);
+    int x= g_tree_nnodes(categorias);
     printf("Fim da filtragem\n");
     printf("Olá\n");
     g_tree_foreach(categorias,print,ind);
     ind = fopen("Categorias.html","w");
     g_tree_foreach(categorias,indiceCategorias,ind);
+    fprintf(estatisticas,"</table>\n<p><b> Existem %d categorias </b></p>",x);
+    fprintf(estatisticas,"</table></body></html>");
 fclose(ind);
+fclose(estatisticas);
 
     return 0;
 }

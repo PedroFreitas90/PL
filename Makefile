@@ -5,4 +5,4 @@ LFLAGS=$(shell pkg-config --libs glib-2.0)
 
 ex: ex.l
 	flex ex.l
-	cc $(CFLAGS)  -o ex lex.yy.c $(LFLAGS)
+	cc $(CFLAGS) -Wall -O3 -o ex lex.yy.c $(LFLAGS)
