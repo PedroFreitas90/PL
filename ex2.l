@@ -115,7 +115,7 @@ gboolean indiceCategorias(gpointer key, gpointer value, gpointer data){
 
 
 gboolean print(gpointer key, gpointer value, gpointer data){
-    printf("KEY -> %s \n",key);
+    //printf("KEY -> %s \n",key);
     GTree* aux = (GTree*) value;
     gint a = g_tree_nnodes(aux);
     int x = (int) a;
@@ -190,7 +190,6 @@ int main(int argc,char * argv[]){
     yylex();
     int x= g_tree_nnodes(categorias);
     printf("Fim da filtragem\n");
-    printf("Olá\n");
     g_tree_foreach(categorias,print,ind);
     ind = fopen("Categorias.html","w");
     g_tree_foreach(categorias,indiceCategorias,ind);
