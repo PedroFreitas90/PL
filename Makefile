@@ -19,6 +19,11 @@ ex3: ex3.l
 clean-ex1:
 		rm ex1
 		rm citacoes.html
+
+clean-ex2:
+		rm ex2
+		rm *.html
+
 clean-ex3:
 		rm ex3
 		rm estatisticas.html
