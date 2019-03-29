@@ -18,7 +18,7 @@
 "<page>"             {BEGIN PAGE;}
 <PAGE>\<title>[^<]* {nome=strdup(yytext+7);}
 <PAGE>">{{Autor"                      {BEGIN AUTOR;flag=1;}
-<AUTOR>[*][ ]*[']*"&quot;"           { printf("--------\nAUTOR: \n");BEGIN QUOTE;conta_quotes++;}
+<AUTOR>[*][ ]*[']*"&quot;"           {BEGIN QUOTE;conta_quotes++;}
 <AUTOR>"[["[Cc]"ategoria:"    {BEGIN INITIAL;flag=0;}
 <QUOTE>[^&\n]* {if(flag)  {BEGIN AUTOR; insereAutor(nome);} else {BEGIN PAGE;}}
 <PAGE>[*][ ]*[']*"&quot;" {BEGIN QUOTE;conta_quotes++;}

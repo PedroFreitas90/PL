@@ -13,8 +13,8 @@
 %%
 "<page>"             {BEGIN PAGE;}
 <PAGE>\<title>[^<]* {nome=strdup(yytext+7);}
-<PAGE>">{{Autor"                      {BEGIN AUTOR; len++;flag=1;}
-<AUTOR>[*][ ]*[']*"&quot;"           { printf("--------\nAUTOR: \n");BEGIN QUOTE;}
+<PAGE>">{{Autor"                      {BEGIN AUTOR;flag=1;}
+<AUTOR>[*][ ]*[']*"&quot;"           {BEGIN QUOTE;}
 <AUTOR>"[["[Cc]"ategoria:"    {BEGIN INITIAL;flag=0;}
 <QUOTE>[^&\n]* {if(flag)  {fprintf(citacoes, "<p><b>%s</b>",nome); BEGIN AUTOR;} else {BEGIN PAGE;}
                 fprintf(citacoes,"  %s</p>\n",yytext); }
