@@ -78,8 +78,11 @@ flag=0;
 <AUTOR>"EbooksG" {fprintf(out,"<p><b>%s</b>",yytext);}
 <AUTOR>[=][^\n|}]* {fprintf(out,": %s</p>\n",yytext+1);}
 <AUTOR>"}}" {BEGIN BIO;par++;}
-<BIO>[^\*]* {fprintf(out,"%s",yytext);BEGIN CAT;fprintf(out,"</ul></body></html>");
-fclose(out);}
+<BIO>[\*] {BEGIN CAT;fprintf(out,"</ul></body></html>");fclose(out);}
+<BIO>[[] {;}
+<BIO>[]] {;}
+<BIO>[-] {;}
+<BIO>(.|\n) {fprintf(out,"%s",yytext);}
 <CAT>"[["[Cc]"ategoria:"[^]]* {cat++;categoria=strdup(yytext+12);
 remove_espacos(filename);
 sprintf(refs,"<li><a href=%s> %s </a></li>\n\n",linke,title);
