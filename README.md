@@ -6,7 +6,7 @@
 - Fazer download do ficheiro xml em: http://natura.di.uminho.pt/~jj/pl-19/wiki/ptwikiquote/ e descompactar para ficar em formato XML.
 
 2º Passo:
-- Abrir terminal na diretoria onde está a pasrta com estes ficheiros;
+- Abrir terminal na diretoria onde está a pasta com estes ficheiros;
 
 - Fazer: 
             make exY
