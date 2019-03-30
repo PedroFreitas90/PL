@@ -18,12 +18,18 @@ ex3: ex3.l
 
 clean-ex1:
 		rm ex1
-		rm citacoes.html
+		rm lex.yy.c
+		rm -f citacoes.html
 
 clean-ex2:
 		rm ex2
-		rm *.html
-
+		rm lex.yy.c
+		find . -maxdepth 1 -type f \! \( -name "*.l" -o -name "Makefile" -o -name 'README.md' -o -name 'ex1' -o -name 'citacoes.html' -o -name 'estatisticas.html' -o -name 'ex3' \) -delete 
 clean-ex3:
 		rm ex3
-		rm estatisticas.html
+		rm lex.yy.c
+		rm -f estatisticas.html
+clean:
+		rm -f ex1 ex2 ex3
+		rm -f lex.yy.c
+		rm -f *.html
