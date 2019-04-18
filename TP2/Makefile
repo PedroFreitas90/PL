@@ -2,7 +2,7 @@ run:
 	gawk -f processador.awk emigra.csv
 	gawk -f processador-b.awk emigra.csv
 	gawk -f processador-c.awk emigra.csv
-	gawk -f processador.awk emigra.csv
+	gawk -f processador-d.awk emigra.csv
 
 processador-a:
 	gawk -f processador.awk emigra.csv
