@@ -1,11 +1,24 @@
-PL - TP2
+# PL -TP2
+# GAWK
+# COMO CORRER:
 
-Processador GAWK
+1º Passo:
+- Abrir terminal na diretoria onde está a pasta com estes ficheiros.
 
-Como compilar:
-gawk -f processador.awk ficheiro
+- Fazer: 
+            make run
+Para correr todos os processadores. Os outputs irão estar na pasta outputs/
+            make processador-Y
+Onde Y pertence aos seguintes valores: a b c d
 
-Como compilar dot:
-dot -Tpdf filename.dot -o name.pdf
+NOTA:
 
-(Se quisermos noutro formato basta substituir onde diz pdf para o outro formato, como por exemplo, png )
+    Como limpar?
+        - Para limpar os outputs e executável de um exercício específico:
+                            make clean-Y
+        - Para limpar todos os outputs e executáveis:
+                            make clean
+
+
+Último passo:
+    HAVE FUN 😎😎😎
