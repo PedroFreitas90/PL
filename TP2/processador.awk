@@ -29,7 +29,6 @@ END{
         print "\n<hr>\n" >local;
 
 
-        print end > local;
         printf(head2,"Concelhos","") > local;
         printf(table_start,"Concelho") > local;
         for (conc in conta){
@@ -41,6 +40,7 @@ END{
         };
         printf (table_entry,"Total:",NR-2) > local;
         print table_end > local;
+        print end > local;
 }
 
 
