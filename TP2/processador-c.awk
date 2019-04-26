@@ -1,12 +1,12 @@
 BEGIN {
-      FS = "[;]*" 
+      FS = "[;]*"
       head = "<h1 align=\"center\"> Nº de ocorrências de nomes próprios </h1>\n";
       head2 = "<h3> %s </h3> <p> %s </p>\n";
       enc = "<html> <head> <meta charset='UTF-8'/> <style>table, th, td {border: 1px solid black; border-collapse: collapse;} th, td {padding: 5px;} th {text-align: left;}</style> </head> <body>";
       entrada = "<li><a> %s </a></li>\n";
   	linha = "<p> %s </p>";
   	end = "</body> </html>";
-  	elemento = "null"; 
+  	elemento = "null";
       table_start = "<table style=\"width:30%\"><tr> <th>%s</th><th>Número de ocorrências</th> </tr>";
       table_entry= "<tr> <td> %s </td><td> %d </td> </tr>";
       table_end = "</table>";
@@ -14,17 +14,29 @@ BEGIN {
       local = "output/ex-c.html";
 }
         NR>2 {if ($2 != " "){
-                split($2,a,"[ ]");conta[a[1]]++;contaPessoal[a[1]]++;
+                split($2,a,"[ ]");
+                for (nome in a)
+                  if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
+                conta[a[nome]]++;contaPessoal[a[nome]]++;
                }
               if ($6 != "Não tem" && $6 != " "){
-                    split($6,a,"[ ]");conta[a[1]]++;contaPar[a[1]]++;
+                    split($6,a,"[ ]");
+                    for (nome in a)
+                    if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
+                    conta[a[nome]]++;contaPar[a[nome]]++;
                }
               if ($7 != " "){
-                    split($7,a,"[ ]");conta[a[1]]++;contaPar[a[1]]++;
+                    split($7,a,"[ ]");
+                    for (nome in a)
+                    if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
+                    conta[a[nome]]++;contaPar[a[nome]]++;
                }
               if ($8 != " "){
-                    split($8,a,"[ ]");conta[a[1]]++;contaConj[a[1]]++;
-               }
+                    split($8,a,"[ ]");
+                    for (nome in a)
+                    if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
+                    conta[a[nome]]++;contaConj[a[nome]]++;
+              }
               }
 
 END{
@@ -63,17 +75,17 @@ END{
 
 
 
-#END { 
+#END {
 #      print "Nº de ocorrências do nome próprio:"
 #      for (nome in conta)
 #        print nome "->" conta[nome];
 #      print "\n"
-#      
+#
 #      print "Nº de ocorrências do nome como nome pessoal do requerente:"
 #        for (nome in contaPessoal)
 #            print nome "->" contaPessoal[nome];
-#      print "\n" 
-#      
+#      print "\n"
+#
 #      print "Nº de ocorrências do nome como nome pessoal de um dos pais do requerente:"
 #        for (nome in contaPar)
 #            print nome "->" contaPar[nome];
