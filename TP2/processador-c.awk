@@ -13,26 +13,26 @@ BEGIN {
       system("mkdir -p output/");
       local = "output/ex-c.html";
 }
-        NR>2 {if ($2 != " "){
-                split($2,a,"[ ]");
+        NR>2 {if ($2 ~ /[A-Z].+/ ){
+                split($2,a," ");
                 for (nome in a)
                   if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
                 conta[a[nome]]++;contaPessoal[a[nome]]++;
                }
-              if ($6 != "Não tem" && $6 != " "){
-                    split($6,a,"[ ]");
+              if ($6 != "Não tem" && ($6 ~/[A-Z].+/)){
+                    split($6,a," ");
                     for (nome in a)
                     if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
                     conta[a[nome]]++;contaPar[a[nome]]++;
                }
-              if ($7 != " "){
-                    split($7,a,"[ ]");
+              if ( $7 ~ /[A-Z].+/ ){
+                    split($7,a," ");
                     for (nome in a)
                     if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
                     conta[a[nome]]++;contaPar[a[nome]]++;
                }
-              if ($8 != " "){
-                    split($8,a,"[ ]");
+              if ($8 ~ /[A-Z].+/){
+                    split($8,a," ");
                     for (nome in a)
                     if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
                     conta[a[nome]]++;contaConj[a[nome]]++;
