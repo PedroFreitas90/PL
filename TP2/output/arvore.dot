@@ -6,7 +6,6 @@ rankdir=LR;
 "Júlio Vaz " -> "Manuel Vaz"[color=red,label=" Pai de "];
 "Virgínia Delgado" -> "Manuel Vaz"[color=red,label=" Mae de "];
 "Maria Vaz Monteiro" -> "Manuel Vaz"[color=blue,label=" Conjuge"];
-"Não tem" -> "Ilídio David de Freitas "[color=red,label=" Pai de "];
 "Vigínia de Freitas" -> "Ilídio David de Freitas "[color=red,label=" Mae de "];
 "Deolinda Nogueira" -> "Ilídio David de Freitas "[color=blue,label=" Conjuge"];
 "Manuel Ferreira" -> "Maria da Conceição Ribeiro "[color=red,label=" Pai de "];
