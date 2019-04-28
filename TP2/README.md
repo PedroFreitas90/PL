@@ -8,13 +8,15 @@
 - Fazer: 
             make run
 Para correr todos os processadores. Os outputs irão estar na pasta outputs/
-            make processador-Y
-Onde Y pertence aos seguintes valores: a b c d
+
+	make processador-Y
+onde Y pertence aos seguintes valores: a b c d
+Para correr apenas um processdor em específico. O output também irá estar na pasta outputs/
 
 NOTA:
 
     Como limpar?
-        - Para limpar os outputs e executável de um exercício específico:
+        - Para limpar os outputs de um exercício específico:
                             make clean-Y
         - Para limpar todos os outputs e executáveis:
                             make clean
