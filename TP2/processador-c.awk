@@ -1,5 +1,5 @@
 BEGIN {
-      FS = "[;]*"
+      FS = ";"
       head = "<h1 align=\"center\"> Nº de ocorrências de nomes próprios </h1>\n";
       head2 = "<h3> %s </h3> <p> %s </p>\n";
       enc = "<html> <head> <meta charset='UTF-8'/> <style>table, th, td {border: 1px solid black; border-collapse: collapse;} th, td {padding: 5px;} th {text-align: left;}</style> </head> <body>";
@@ -19,20 +19,20 @@ BEGIN {
                   if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
                 conta[a[nome]]++;contaPessoal[a[nome]]++;
                }
-              if ($6 != "Não tem" && ($6 ~/[A-Z].+/)){
-                    split($6,a," ");
-                    for (nome in a)
-                    if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
-                    conta[a[nome]]++;contaPar[a[nome]]++;
-               }
-              if ( $7 ~ /[A-Z].+/ ){
+              if ($7 != "Não tem" && ($7 ~/[A-Z].+/)){
                     split($7,a," ");
                     for (nome in a)
                     if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
                     conta[a[nome]]++;contaPar[a[nome]]++;
                }
-              if ($8 ~ /[A-Z].+/){
-                    split($8,a," ");
+              if ( $9 ~ /[A-Z].+/ ){
+                    split($9,a," ");
+                    for (nome in a)
+                    if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
+                    conta[a[nome]]++;contaPar[a[nome]]++;
+               }
+              if ($11 ~ /[A-Z].+/){
+                    split($11,a," ");
                     for (nome in a)
                     if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
                     conta[a[nome]]++;contaConj[a[nome]]++;

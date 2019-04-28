@@ -1,20 +1,20 @@
 BEGIN {
-        FS = "[;]*" 
+        FS = ";"
         head = "<h1 align=\"center\"> Nº de processos registados </h1>\n";
         head2 = "<h3> %s </h3> <p> %s </p>\n";
         enc = "<html> <head> <meta charset='UTF-8'/> <style>table, th, td {border: 1px solid black; border-collapse: collapse;} th, td {padding: 5px;} th {text-align: left;}</style> </head> <body>";
   	entrada = "<li><a> %s </a></li>\n";
   	linha = "<p> %s </p>";
   	end = "</body> </html>";
-  	elemento = "null"; 
+  	elemento = "null";
         table_start = "<table style=\"width:30%\"><tr> <th>%s</th><th>Número de processos registados</th> </tr>";
         table_entry= "<tr> <td> %s </td><td> %d </td> </tr>";
         table_end = "</table>";
         system("mkdir -p output/");
-        local = "output/ex-a.html";             
+        local = "output/ex-a.html";
 }
 
-        NR > 2 {conta[$4][$3]++}
+        NR > 2 {conta[$5][$4]++}
 
 END{
         print enc > local;
@@ -35,7 +35,7 @@ END{
                 for (freg in conta[conc])
                         r+=conta[conc][freg]
                 printf (table_entry,conc,r) > local;
-        
+
         };
         printf (table_entry,"Total:",NR-2) > local;
         print table_end > local;
@@ -50,7 +50,7 @@ END{
 #            for (freg in conta[conc])
 #                print conc "-" freg "->" conta[conc][freg];
 #      print "\n"
-#      
+#
 #      print "Nº de emigrantes por concelho:"
 #      for (conc in conta){
 #         r = 0
