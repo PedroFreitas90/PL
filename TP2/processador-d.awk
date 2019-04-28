@@ -9,24 +9,16 @@ BEGIN {
             }
 
     NR >2 {
-        if($2 != " " && $7 != " " && $9 != " " && $11 != " "){
-              print "\x22" $9 "\" -> \"" $2 "\"[color=red,label=\x22 Mae de \x22];" > local;
+        if($2 ~ /[A-Za-z]/ ){
+            if($7 ~ /[A-Za-z]/  )
               print "\x22" $7 "\" -> \"" $2 "\"[color=red,label=\x22 Pai de \x22];" > local;
-              if($11 ~ /[A-Za-z]/ )
+            if($9 ~ /[A-Za-z]/  )
+              print "\x22" $9 "\" -> \"" $2 "\"[color=red,label=\x22 Mae de \x22];" > local;
+            if($11 ~ /[A-Za-z]/ )
               print "\x22" $11 "\" -> \"" $2 "\"[color=blue,label=\x22 Conjuge\x22];" > local;
             }
-            else
-                if ($2 != " " && $7 !=" "){
-                    print "\x22" $7 "\" -> \"" $2 "\"[color=red,label=\x22 Pai de \x22];" > local;
-                    if($11 ~ /[A-Za-z]/ )
-                    print "\x22" $11 "\" -> \"" $2 "\"[color=blue,label=\x22 Conjuge\x22];" > local;
-                    }
-                else
-                    if($2 != " " && $9 !=" "){
-                    print "\x22" $9 "\" -> \"" $2 "\"[color=red,label=\x22 Mae de \x22];" > local;
-                    if($11 ~ /[A-Za-z]/ )
-                    print "\x22" $11 "\" -> \"" $2 "\"[color=blue,label=\x22 Conjuge\x22];" > local;
-        }
+
+
         }
 END {
     print"}" > local;
