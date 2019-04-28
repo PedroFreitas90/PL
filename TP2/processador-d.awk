@@ -9,7 +9,7 @@ BEGIN {
             }
 
     NR >2 {
-        if($2 != " " && $7 != " " && $9 != " " && $11 != ""){
+        if($2 != " " && $7 != " " && $9 != " " && $11 != " "){
               print "\x22" $9 "\" -> \"" $2 "\"[color=red,label=\x22 Mae de \x22];" > local;
               print "\x22" $7 "\" -> \"" $2 "\"[color=red,label=\x22 Pai de \x22];" > local;
               if($11 ~ /[A-Za-z]/ )
