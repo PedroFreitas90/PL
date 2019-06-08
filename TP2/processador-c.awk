@@ -37,7 +37,7 @@ BEGIN {
                     if(a[nome]!="de" && a[nome]!="do"&& a[nome]!="dos"&& a[nome]!="da" && a[nome]!="e"&& a[nome]!="")
                     conta[a[nome]]++;contaConj[a[nome]]++;
               }
-              }
+            }
 
 END{
       print enc > local;
@@ -72,29 +72,3 @@ END{
       print "\n<hr>\n" >local;
 
 }
-
-
-
-#END {
-#      print "Nº de ocorrências do nome próprio:"
-#      for (nome in conta)
-#        print nome "->" conta[nome];
-#      print "\n"
-#
-#      print "Nº de ocorrências do nome como nome pessoal do requerente:"
-#        for (nome in contaPessoal)
-#            print nome "->" contaPessoal[nome];
-#      print "\n"
-#
-#      print "Nº de ocorrências do nome como nome pessoal de um dos pais do requerente:"
-#        for (nome in contaPar)
-#            print nome "->" contaPar[nome];
-#      print "\n"
-#
-#      print "Nº de ocorrências do nome como nome do conjugue do requerente:"
-#        for (nome in contaConj)
-#            print nome "->" contaConj[nome];
-#      print "\n"#
-#
-#      print "Nº de utilizadores: " NR-2
-#}

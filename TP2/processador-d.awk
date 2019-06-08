@@ -18,6 +18,7 @@ BEGIN {
               print "\x22" $2 "\" -> \"" $11 "\"[color=blue,label=\x22 Cônjuge\x22];" > local;
        }
     }
+
 END {
     print"}" > local;
     system("dot -Tpdf output/arvore.dot -o output/arvore.pdf");
