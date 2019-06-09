@@ -1,37 +1,33 @@
 %{
 #include <stdio.h>
-
+int flag=0;
 %}
+
 %option noyywrap yylineno
-%x YAML  LISTAVALUE LISTA VALUE MAPPING
+%x YAML  LISTAVALUE LISTA VALUE MAPPING ELEMENTOARRAY
 
 
 %%
 [-][-][-]   {BEGIN YAML;return yytext[0];}
-<YAML>^[a-zA-Z0-9][^:]+ {printf("%s\n",yytext);yylval.key=strdup(yytext);BEGIN LISTAVALUE;return KEY;}
+<YAML>^[a-zA-Z0-9][^:]+ {printf("%s\n",yytext);flag=0; BEGIN LISTAVALUE;flag=0;}
 <YAML>"." {BEGIN INITIAL;}
+<YAML>[-] {if(!flag) BEGIN LISTA; else BEGIN ELEMENTOARRAY;}
+<YAML>[a-zA-Z0-9][^:]+ {printf("%s\n",yytext);BEGIN VALUE; flag=1; }
+<YAML>[a-zA-Z0-9][^:]+ {printf("%s\n",yytext);BEGIN VALUE; flag=1; }
+
+<LISTAVALUE>[\n] {printf("%s\n",yytext);BEGIN YAML;}
+<LISTAVALUE>[a-zA-Z0-9][^\n]+ {printf("%s\n",yytext);BEGIN YAML;}
+
+<LISTA>[a-zA-Z0-9][^\n]+    {printf("%s\n",yytext);BEGIN YAML;}
 
 
-<LISTAVALUE>[:]   {BEGIN VALUE;}
+<VALUE>[\n]            {BEGIN YAML;}
+<VALUE>[a-zA-Z0-9][^\n]+    {printf("%s\n",yytext);BEGIN YAML;}
 
-<LISTAVALUE>[-] {BEGIN LISTA;}
+<ELEMENTOARRAY>[a-zA-Z0-9][^:]+  {printf("%s\n",yytext);BEGIN MAPPING;}
 
-<LISTAVALUE>[a-zA-Z0-9][^:]+ {printf("%s\n",yytext);}
-
-<LISTAVALUE>[\n]/[a-zA-Z0-9] {BEGIN YAML;}
-
-
-<LISTA>.+[:]  {printf("%s\n",yytext);BEGIN MAPPING;}
-<LISTA>.+[\n]   {printf("%s\n",yytext);yylval.atributo=strdup(yytext);BEGIN LISTAVALUE;return ATR;}
-
-
-
-
-<VALUE>([a-zA-Z0-9][^\n]+|[\n])   {printf("%s\n",yytext);BEGIN LISTAVALUE;}
-
-
-
-<MAPPING>[^\n]+   {printf("%s\n",yytext);BEGIN LISTAVALUE;}
+<MAPPING>[0-9a-zA-Z][^\n]*    {printf("%s\n",yytext);BEGIN YAML;}
+<MAPPING>[\n]   {printf("%s\n",yytext);BEGIN YAML;}
 
 
 
