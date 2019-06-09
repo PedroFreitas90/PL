@@ -7,4 +7,4 @@ test: yaml_to_json
 	./ yaml_to_json
 
 clean:
-	rm -f y.tab.c lex.yy.c calc
+	rm -f y.tab.c lex.yy.c yaml_to_json

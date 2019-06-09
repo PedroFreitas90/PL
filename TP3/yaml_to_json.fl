@@ -3,26 +3,37 @@
 
 %}
 %option noyywrap yylineno
-%x YAML  VALUES ATRIBUTO ARRAY ARRAYELMENTO ELEMENTOKEY ELEMENTOVALUES
+%x YAML  LISTAVALUE LISTA VALUE MAPPING
+
 
 %%
 [-][-][-]   {BEGIN YAML;return yytext[0];}
-<YAML>^[a-zA-Z0-9]+ {yylval.key=strdup(yytext);BEGIN VALUES ;return KEY;}
+<YAML>^[a-zA-Z0-9][^:]+ {printf("%s\n",yytext);yylval.key=strdup(yytext);BEGIN LISTAVALUE;return KEY;}
 <YAML>"." {BEGIN INITIAL;}
 
-<VALUES>[-]  {BEGIN ATRIBUTO;}
-<VALUES>^[a-zA-Z0-9]+ {yylval.key=strdup(yytext);return KEY;}
-<VALUES>[ ]+[a-zA-Z0-9]+[:] {printf("DEU000");BEGIN ARRAYELMENTO;}
 
-<ARRAYELMENTO>[^\n]+ {printf("%s\n",yytext);BEGIN VALUES;}
-<ARRAYELMENTO>[-] {BEGIN ELEMENTOKEY;}
-<ARRAYELMENTO>^[a-zA-Z0-9]+ {yylval.key=strdup(yytext);BEGIN VALUES;return KEY;}
+<LISTAVALUE>[:]   {BEGIN VALUE;}
 
-<ELEMENTOKEY>[^:]+ {printf("%s\n",yytext);BEGIN ELEMENTOVALUES;}
+<LISTAVALUE>[-] {BEGIN LISTA;}
 
-<ELEMENTOVALUES>[^:]+ {printf("%s\n",yytext);BEGIN ARRAYELMENTO;}
+<LISTAVALUE>[a-zA-Z0-9][^:]+ {printf("%s\n",yytext);}
 
-<ATRIBUTO>[^\n]+ {yylval.atributo=strdup(yytext); BEGIN VALUES; return ATR;}
+<LISTAVALUE>[\n]/[a-zA-Z0-9] {BEGIN YAML;}
+
+
+<LISTA>.+[:]  {printf("%s\n",yytext);BEGIN MAPPING;}
+<LISTA>.+[\n]   {printf("%s\n",yytext);yylval.atributo=strdup(yytext);BEGIN LISTAVALUE;return ATR;}
+
+
+
+
+<VALUE>([a-zA-Z0-9][^\n]+|[\n])   {printf("%s\n",yytext);BEGIN LISTAVALUE;}
+
+
+
+<MAPPING>[^\n]+   {printf("%s\n",yytext);BEGIN LISTAVALUE;}
+
+
 
 <*>(.|\n) {;}
 %%
