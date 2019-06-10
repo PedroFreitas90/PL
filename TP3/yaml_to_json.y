@@ -74,7 +74,7 @@ KEYVALUE: KEYINSIDE VAL  {asprintf(&$$,"\t\"%s\": \"%s\"",$1,$2);}
 
 PARAGRAFO: PARAGRAPH LISTATEXTO {asprintf(&$$,"\t\"%s\": \"%s\"",$1,$2);}
         ;
-CONTEUDO: CONT LISTATEXTO {asprintf(&$$,"\t\"%s\": \"%s\",",$1,$2);}
+CONTEUDO: CONT LISTATEXTO {asprintf(&$$,"\t\"%s\": \"%s\"",$1,$2);}
         ;
 
 
