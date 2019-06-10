@@ -15,15 +15,15 @@
 }
 
 %type <key> KEY KEYINSIDE ELEMENTOKEY PARAGRAPH CONT
-%type <atributo> b  ATR LISTAARRAY  ARRAYVALUES lista LISTAKEYVALUE OBJECT  CHAVESVALORESPAR KEY_LIST
+%type <atributo> b  ATR LISTAARRAY  ARRAYVALUES lista  OBJECT  CHAVESVALORESPAR KEY_LIST
 %type <value> VAL  ELEMENTOVALUE AUX LISTA ELEMENTO  KEYVALUE TEXTO PARAGRAFO LISTATEXTO CONTEUDO
 %%
 
-conv : '-' CHAVESVALORESPAR   { printf("{\n\t %s \n}\n",$2);/* ISTO PÕE O PRIMEIRO E ÚLTIMO {} */ }
+conv :  CHAVESVALORESPAR   { printf("{\n\t %s \n}\n",$1);/* ISTO PÕE O PRIMEIRO E ÚLTIMO {} */ }
      ;
 
 CHAVESVALORESPAR:KEY_LIST                     {$$ =$1;}
-                | CHAVESVALORESPAR KEY_LIST   {asprintf(&$$,"%s\n%s",$1,$2);}
+                | CHAVESVALORESPAR KEY_LIST   {asprintf(&$$,"%s,\n%s",$1,$2);}
                 | OBJECT                      {$$=$1;}
                 | CHAVESVALORESPAR OBJECT     {asprintf(&$$,"%s,\n%s",$1,$2);}
                 | PARAGRAFO                   {$$=$1;}
@@ -33,7 +33,8 @@ CHAVESVALORESPAR:KEY_LIST                     {$$ =$1;}
                 ;
 
 
-KEY_LIST : KEY lista {asprintf(&$$,"\"%s\": [\n  %s \n],",$1,$2);}
+KEY_LIST : KEY lista {asprintf(&$$,"\"%s\": [\n  %s \n]",$1,$2);}
+         | KEY LISTATEXTO {asprintf(&$$,"\"%s\" : \"%s\"",$1,$2);}
          ;
 
 lista : b {$$=$1;}
@@ -67,10 +68,6 @@ ARRAYVALUES: ELEMENTO {asprintf(&$$,"%s",$1);}
 
 ELEMENTO: ELEMENTOKEY ELEMENTOVALUE {asprintf(&$$,"{\n\t\"%s\":\"%s\"\n}",$1,$2);}
         ;
-
-LISTAKEYVALUE: KEYVALUE {asprintf(&$$,"%s",$1);}
-            | LISTAKEYVALUE KEYVALUE {asprintf(&$$,"%s,\n%s",$1,$2);}
-            ;
 
 KEYVALUE: KEYINSIDE VAL  {asprintf(&$$,"\t\"%s\":\"%s\"",$1,$2);}
         ;

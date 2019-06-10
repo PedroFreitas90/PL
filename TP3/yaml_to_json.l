@@ -18,13 +18,13 @@ void removeSpaces(char *str)
 %}
 
 %option noyywrap yylineno
-%x YAML  LISTAVALUE LISTA VALUE MAPPING ELEMENTOARRAY PARAGRAFO CONTENT
+%x YAML  LISTAVALUE LISTA VALUE MAPPING ELEMENTOARRAY PARAGRAFO CONTENT VETOR
 
 
 %%
-[-][-][-]   {BEGIN YAML;return yytext[0];}
+[-][-][-]   {BEGIN YAML;}
 <YAML>^[a-zA-Z0-9][^:]+ {yylval.key=strdup(yytext);printf("%sggfgf\n",yytext);flag=0; BEGIN LISTAVALUE;flag=0;return KEY;}
-<YAML>"." {BEGIN INITIAL;}
+<YAML>[a] {BEGIN INITIAL;return yytext[0];}
 <YAML>[-] {if(!flag) BEGIN LISTA; else BEGIN ELEMENTOARRAY;}
 <YAML>[a-zA-Z0-9][^:]+ {printf("%s\n",yytext);BEGIN VALUE; flag=1;yylval.key=strdup(yytext);return KEYINSIDE ;}
 <YAML>^[a-zA-Z0-9]+[:][ ]+[>][ ]*[\n] {BEGIN PARAGRAFO;printf("%s\n",yytext);removeSpaces(yytext);yylval.key=strndup(yytext,strlen(yytext)-3);return PARAGRAPH ;}
@@ -32,7 +32,12 @@ void removeSpaces(char *str)
 <YAML>^[a-zA-Z0-9]+[:][ ]+"|"[ ]*[\n] {BEGIN CONTENT;printf("ola");removeSpaces(yytext);yylval.key=strndup(yytext,strlen(yytext)-3);return CONT ;}
 
 <LISTAVALUE>[\n] {printf("%s\n",yytext);BEGIN YAML;}
-<LISTAVALUE>[a-zA-Z0-9][^\n]+ {printf("%s\n",yytext);BEGIN YAML;}
+<LISTAVALUE>[a-zA-Z0-9][^\n]+ {BEGIN VETOR; printf("%s\n",yytext);VETOR;yylval.value=strdup(yytext);return TEXTO;}
+
+<VETOR>[\n]   {yylval.value=strdup(" ");return TEXTO;}
+<VETOR>[^\n]* {yylval.value=strdup(yytext);return TEXTO;}
+<VETOR>[\n]/[a-zA-Z0-9]     { BEGIN YAML;}
+
 
 <LISTA>[a-zA-Z0-9][^\n]+    {printf("%s\n",yytext);BEGIN YAML;yylval.atributo=strdup(yytext);return ATR;}
 

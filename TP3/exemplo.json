@@ -1,5 +1,6 @@
 jsonggfgf
-fff
+
+
 rigid
 better for data interchange
 yamlggfgf
@@ -34,7 +35,7 @@ to save space
 "yaml": [
   "slim and flexible",
  "better for configuration" 
-],,
+],
 "object":{
 	"key":"value",
 	"array": [
