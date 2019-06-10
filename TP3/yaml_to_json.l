@@ -24,7 +24,7 @@ void removeSpaces(char *str)
 %%
 [-][-][-]   {BEGIN YAML;}
 <YAML>^[a-zA-Z0-9][^:]+ {yylval.key=strdup(yytext);flag=0; BEGIN LISTAVALUE;flag=0;return KEY;}
-<YAML>"." {BEGIN INITIAL;return yytext[0];}
+<YAML>"." {BEGIN INITIAL;}
 <YAML>[-] {if(!flag) BEGIN LISTA; else BEGIN ELEMENTOARRAY;}
 <YAML>[a-zA-Z0-9][^:]+ {BEGIN VALUE; flag=1;yylval.key=strdup(yytext);return KEYINSIDE ;}
 <YAML>^[a-zA-Z0-9]+[:][ ]+[>][ ]*[\n] {BEGIN PARAGRAFO;removeSpaces(yytext);yylval.key=strndup(yytext,strlen(yytext)-3);return PARAGRAPH ;}
