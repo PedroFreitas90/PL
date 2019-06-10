@@ -19,11 +19,11 @@
 %type <value> VAL  ELEMENTOVALUE AUX LISTA ELEMENTO  KEYVALUE TEXTO PARAGRAFO LISTATEXTO CONTEUDO
 %%
 
-conv :  CHAVESVALORESPAR   { printf("{\n\t %s \n}\n",$1);/* ISTO PÕE O PRIMEIRO E ÚLTIMO {} */ }
+conv :  CHAVESVALORESPAR   { printf("{\n\t%s \n}\n",$1);/* ISTO PÕE O PRIMEIRO E ÚLTIMO {} */ }
      ;
 
 CHAVESVALORESPAR:KEY_LIST                     {$$ =$1;}
-                | CHAVESVALORESPAR KEY_LIST   {asprintf(&$$,"%s,\n%s",$1,$2);}
+                | CHAVESVALORESPAR KEY_LIST   {asprintf(&$$,"%s,\n\t%s",$1,$2); /*   */ }
                 | OBJECT                      {$$=$1;}
                 | CHAVESVALORESPAR OBJECT     {asprintf(&$$,"%s,\n%s",$1,$2);}
                 | PARAGRAFO                   {$$=$1;}
@@ -33,48 +33,48 @@ CHAVESVALORESPAR:KEY_LIST                     {$$ =$1;}
                 ;
 
 
-KEY_LIST : KEY lista {asprintf(&$$,"\"%s\": [\n  %s \n]",$1,$2);}
-         | KEY LISTATEXTO {asprintf(&$$,"\"%s\" : \"%s\"",$1,$2);}
+KEY_LIST : KEY lista {asprintf(&$$,"\"%s\": [\n\t%s \n\t]",$1,$2);}
+         | KEY LISTATEXTO {asprintf(&$$,"\"%s\" : \t\"%s\"",$1,$2);}
          ;
 
 lista : b {$$=$1;}
-      | lista b  {asprintf(&$$,"\"%s\",\n \"%s\"",$1,$2);}
+      | lista b  {asprintf(&$$,"\t\"%s\",\n \t\t\"%s\"",$1,$2);}
       ;
 
 b : ATR {$$=$1;}
 
 
-OBJECT: KEY LISTA {asprintf(&$$,"\"%s\":{\n%s\n}",$1,$2);}
+OBJECT: KEY LISTA {asprintf(&$$,"\t\"%s\": {\n\t%s\n\t}",$1,$2);/* Object -> key e { }*/ }
       ;
 
 
 LISTA: AUX          {asprintf(&$$,"%s",$1);}
-    | LISTA AUX   {asprintf(&$$,"%s,\n%s",$1,$2);};
+    | LISTA AUX   {asprintf(&$$,"%s,\n\t%s",$1,$2);};
     ;
 
-AUX:KEYVALUE        {asprintf(&$$,"%s",$1);}
+AUX:KEYVALUE        {asprintf(&$$,"%s",$1);  /* */ }
    |LISTAARRAY           {asprintf(&$$,"%s",$1);}
    ;
 
 
-LISTAARRAY: KEYINSIDE ARRAYVALUES  {asprintf(&$$,"\t\"%s\": [\n\t%s\n]",$1,$2);}
+LISTAARRAY: KEYINSIDE ARRAYVALUES  {asprintf(&$$,"\t\"%s\": [\n\t%s\n\t\t]",$1,$2);}
     //      | LISTAARRAY KEYINSIDE ARRAYVALUE {asprintf(&$$,"%s\n%s",$1,$2);
           ;
 
 
 ARRAYVALUES: ELEMENTO {asprintf(&$$,"%s",$1);}
-          | ARRAYVALUES ELEMENTO {asprintf(&$$,"%s,\n%s",$1,$2);}
+          | ARRAYVALUES ELEMENTO {asprintf(&$$,"%s,\n\t%s",$1,$2);/*   */ }
           ;
 
-ELEMENTO: ELEMENTOKEY ELEMENTOVALUE {asprintf(&$$,"{\n\t\"%s\":\"%s\"\n}",$1,$2);}
+ELEMENTO: ELEMENTOKEY ELEMENTOVALUE {asprintf(&$$,"\t  {\n\t\t\t  \"%s\": \"%s\"\n\t\t  }",$1,$2);}
         ;
 
-KEYVALUE: KEYINSIDE VAL  {asprintf(&$$,"\t\"%s\":\"%s\"",$1,$2);}
+KEYVALUE: KEYINSIDE VAL  {asprintf(&$$,"\t\"%s\": \"%s\"",$1,$2);}
         ;
 
-PARAGRAFO: PARAGRAPH LISTATEXTO {asprintf(&$$,"\"%s\":\"%s\"",$1,$2);}
+PARAGRAFO: PARAGRAPH LISTATEXTO {asprintf(&$$,"\t\"%s\": \"%s\"",$1,$2);}
         ;
-CONTEUDO: CONT LISTATEXTO {asprintf(&$$,"\"%s\":\"%s\",",$1,$2);}
+CONTEUDO: CONT LISTATEXTO {asprintf(&$$,"\t\"%s\": \"%s\",",$1,$2);}
         ;
 
 
