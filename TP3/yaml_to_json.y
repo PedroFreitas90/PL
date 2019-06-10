@@ -1,64 +1,93 @@
 %{
  #include <stdio.h>
  #include <math.h>
- int yyerror(char *s){ 
+ int yyerror(char *s){
     fprintf(stderr,"Erro:%s\n",s);
  }
  int yylex();
 %}
 
-%token  KEY ATR
+%token  KEY ATR VAL ELEMENTOVALUE ELEMENTOKEY KEYINSIDE TEXTO PARAGRAPH CONT
 %union{
-    char* key; 
+    char* key;
     char* atributo;
+    char* value;
 }
 
-%type <key> KEY
-%type <atributo> b ATR lista KEY_LIST CHAVESVALORESPAR DIC KEYVALUE LISTA_KEYVALUE ARRAY ARRAY_VALUES
-
+%type <key> KEY KEYINSIDE ELEMENTOKEY PARAGRAPH CONT
+%type <atributo> b  ATR LISTAARRAY  ARRAYVALUES lista LISTAKEYVALUE OBJECT  CHAVESVALORESPAR KEY_LIST
+%type <value> VAL  ELEMENTOVALUE AUX LISTA ELEMENTO  KEYVALUE TEXTO PARAGRAFO LISTATEXTO CONTEUDO
 %%
 
-conv : '-' CHAVESVALORESPAR   { printf("conv{\n %s \n}\n",$2);/* ISTO PÕE O PRIMEIRO E ÚLTIMO {} */ }
+conv : '-' CHAVESVALORESPAR   { printf("{\n\t %s \n}\n",$2);/* ISTO PÕE O PRIMEIRO E ÚLTIMO {} */ }
      ;
 
-CHAVESVALORESPAR: KEY_LIST                  {$$ =$1;}
-                | CHAVESVALORESPAR KEY_LIST {asprintf(&$$," CHAVESVALORESPAR %s\n%s",$1,$2);}
-                | CHAVESVALORESPAR DIC
+CHAVESVALORESPAR:KEY_LIST                     {$$ =$1;}
+                | CHAVESVALORESPAR KEY_LIST   {asprintf(&$$,"%s\n%s",$1,$2);}
+                | OBJECT                      {$$=$1;}
+                | CHAVESVALORESPAR OBJECT     {asprintf(&$$,"%s,\n%s",$1,$2);}
+                | PARAGRAFO                   {$$=$1;}
+                | CHAVESVALORESPAR PARAGRAFO  {asprintf(&$$,"%s,\n%s",$1,$2);}
+                | CONTEUDO                    {$$=$1;}
+                | CHAVESVALORESPAR CONTEUDO   {asprintf(&$$,"%s,\n%s",$1,$2);}
                 ;
 
 
-KEY_LIST : KEY lista {asprintf(&$$, " CHAVEVALORPAR   \"%s\": [\n  \"%s\" \n],",$1,$2);}
+KEY_LIST : KEY lista {asprintf(&$$,"\"%s\": [\n  %s \n],",$1,$2);}
          ;
 
 lista : b {$$=$1;}
-      | lista b  {asprintf(&$$,"LISTA %s,\n %s",$1,$2);}
+      | lista b  {asprintf(&$$,"\"%s\",\n \"%s\"",$1,$2);}
       ;
 
 b : ATR {$$=$1;}
 
-DIC: KEY LISTA_KEYVALUE ARRAY {$$ = $1 ; $$1 = $2;}
-   | KEY ARRAY LISTA_KEYVALUE
+
+OBJECT: KEY LISTA {asprintf(&$$,"\"%s\":{\n%s\n}",$1,$2);}
+      ;
+
+
+LISTA: AUX          {asprintf(&$$,"%s",$1);}
+    | LISTA AUX   {asprintf(&$$,"%s,\n%s",$1,$2);};
+    ;
+
+AUX:KEYVALUE        {asprintf(&$$,"%s",$1);}
+   |LISTAARRAY           {asprintf(&$$,"%s",$1);}
    ;
 
-ARRAY: KEY ':\n\t' ARRAY_VALUES 
-     ;
 
-ARRAY_VALUES : '-' KEYVALUE
-             | ARRAY_VALUES KEYVALUE
-             ;
+LISTAARRAY: KEYINSIDE ARRAYVALUES  {asprintf(&$$,"\t\"%s\": [\n\t%s\n]",$1,$2);}
+    //      | LISTAARRAY KEYINSIDE ARRAYVALUE {asprintf(&$$,"%s\n%s",$1,$2);
+          ;
 
-LISTA_KEYVALUE : KEYVALUE
-        | LISTA_KEYVALUE KEYVALUE
+
+ARRAYVALUES: ELEMENTO {asprintf(&$$,"%s",$1);}
+          | ARRAYVALUES ELEMENTO {asprintf(&$$,"%s,\n%s",$1,$2);}
+          ;
+
+ELEMENTO: ELEMENTOKEY ELEMENTOVALUE {asprintf(&$$,"{\n\t\"%s\":\"%s\"\n}",$1,$2);}
         ;
 
-KV: KEY ':' VALUE {printf(" \"%s\" : \"%s\",\n",$2,$3);}
-  ;
+LISTAKEYVALUE: KEYVALUE {asprintf(&$$,"%s",$1);}
+            | LISTAKEYVALUE KEYVALUE {asprintf(&$$,"%s,\n%s",$1,$2);}
+            ;
 
+KEYVALUE: KEYINSIDE VAL  {asprintf(&$$,"\t\"%s\":\"%s\"",$1,$2);}
+        ;
+
+PARAGRAFO: PARAGRAPH LISTATEXTO {asprintf(&$$,"\"%s\":\"%s\"",$1,$2);}
+        ;
+CONTEUDO: CONT LISTATEXTO {asprintf(&$$,"\"%s\":\"%s\",",$1,$2);}
+        ;
+
+
+LISTATEXTO: TEXTO        {asprintf(&$$,"%s",$1);}
+          | LISTATEXTO TEXTO {asprintf(&$$,"%s%s",$1,$2);}
+          ;
 %%
     #include "lex.yy.c"
 
     int main(){
-      printf("BEGIN\n");
       yyparse();
       return 0;
    }

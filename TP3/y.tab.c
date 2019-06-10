@@ -62,8 +62,16 @@
 
 
 /* Copy the first part of user declarations.  */
+#line 1 "yaml_to_json.y" /* yacc.c:339  */
 
-#line 67 "y.tab.c" /* yacc.c:339  */
+ #include <stdio.h>
+ #include <math.h>
+ int yyerror(char *s){
+    fprintf(stderr,"Erro:%s\n",s);
+ }
+ int yylex();
+
+#line 75 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -96,24 +104,39 @@ extern int yydebug;
   enum yytokentype
   {
     KEY = 258,
-    ATR = 259
+    ATR = 259,
+    VAL = 260,
+    ELEMENTOVALUE = 261,
+    ELEMENTOKEY = 262,
+    KEYINSIDE = 263,
+    TEXTO = 264,
+    PARAGRAPH = 265,
+    CONT = 266
   };
 #endif
 /* Tokens.  */
 #define KEY 258
 #define ATR 259
+#define VAL 260
+#define ELEMENTOVALUE 261
+#define ELEMENTOKEY 262
+#define KEYINSIDE 263
+#define TEXTO 264
+#define PARAGRAPH 265
+#define CONT 266
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 8 "yaml_to_json.y" /* yacc.c:355  */
+#line 11 "yaml_to_json.y" /* yacc.c:355  */
 
     char* key;
     char* atributo;
+    char* value;
 
-#line 117 "y.tab.c" /* yacc.c:355  */
+#line 140 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -130,16 +153,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 134 "y.tab.c" /* yacc.c:358  */
-/* Unqualified %code blocks.  */
-#line 1 "yaml_to_json.y" /* yacc.c:359  */
-
- #include <stdio.h>
- #include <math.h>
- int yyerror(char *s){ fprintf(stderr,"Erro:%s\n",s);}
- int yylex();
-
-#line 143 "y.tab.c" /* yacc.c:359  */
+#line 157 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -379,23 +393,23 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  6
+#define YYFINAL  11
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   5
+#define YYLAST   23
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  6
+#define YYNTOKENS  13
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  6
+#define YYNNTS  16
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  8
+#define YYNRULES  28
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  12
+#define YYNSTATES  36
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   259
+#define YYMAXUTOK   266
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -408,7 +422,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     5,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,    12,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -429,14 +443,17 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     3,     4
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
+       5,     6,     7,     8,     9,    10,    11
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    18,    18,    20,    21,    25,    28,    29,    32
+       0,    22,    22,    25,    26,    27,    28,    29,    30,    31,
+      32,    36,    39,    40,    43,    46,    50,    51,    54,    55,
+      59,    64,    65,    68,    75,    78,    80,    84,    85
 };
 #endif
 
@@ -445,8 +462,11 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "KEY", "ATR", "'-'", "$accept", "conv",
-  "CHAVESVALORESPAR", "CHAVEVALORPAR", "lista", "b", YY_NULLPTR
+  "$end", "error", "$undefined", "KEY", "ATR", "VAL", "ELEMENTOVALUE",
+  "ELEMENTOKEY", "KEYINSIDE", "TEXTO", "PARAGRAPH", "CONT", "'-'",
+  "$accept", "conv", "CHAVESVALORESPAR", "KEY_LIST", "lista", "b",
+  "OBJECT", "LISTA", "AUX", "LISTAARRAY", "ARRAYVALUES", "ELEMENTO",
+  "KEYVALUE", "PARAGRAFO", "CONTEUDO", "LISTATEXTO", YY_NULLPTR
 };
 #endif
 
@@ -455,14 +475,15 @@ static const char *const yytname[] =
    (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_uint16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,    45
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
+     265,   266,    45
 };
 # endif
 
-#define YYPACT_NINF -6
+#define YYPACT_NINF -18
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-6)))
+  (!!((Yystate) == (-18)))
 
 #define YYTABLE_NINF -1
 
@@ -473,8 +494,10 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -5,    -2,     2,    -1,    -2,    -6,    -6,    -6,    -1,    -6,
-      -6,    -6
+      -8,    -3,     5,    -2,     0,     0,    -3,   -18,   -18,   -18,
+     -18,   -18,   -18,    -4,     6,   -18,     3,   -18,   -18,   -18,
+     -18,     4,     4,   -18,   -18,   -18,   -18,   -18,     8,     9,
+     -18,   -18,   -18,   -18,   -18,   -18
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -482,20 +505,24 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,     0,     0,     2,     3,     1,     8,     5,     6,
-       4,     7
+       0,     0,     0,     0,     0,     0,     2,     3,     5,     7,
+       9,     1,    14,     0,    11,    12,    15,    16,    19,    18,
+      27,    25,    26,     4,     6,     8,    10,    24,     0,    20,
+      21,    13,    17,    28,    23,    22
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -6,    -6,    -6,     0,    -6,    -3
+     -18,   -18,   -18,    11,   -18,     1,    12,   -18,     7,   -18,
+     -18,   -17,   -18,    13,    14,    16
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     4,     5,     8,     9
+      -1,     2,     6,     7,    14,    15,     8,    16,    17,    18,
+      29,    30,    19,     9,    10,    21
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -503,32 +530,42 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       1,     3,     6,     7,    10,    11
+       3,    27,    12,    28,     1,    11,    13,     4,     5,    20,
+      12,    13,    35,    33,    34,    31,    28,    23,    24,    25,
+      26,    22,     0,    32
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
-       5,     3,     0,     4,     4,     8
+       3,     5,     4,     7,    12,     0,     8,    10,    11,     9,
+       4,     8,    29,     9,     6,    14,     7,     6,     6,     6,
+       6,     5,    -1,    16
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     5,     7,     3,     8,     9,     0,     4,    10,    11,
-       9,    11
+       0,    12,    14,     3,    10,    11,    15,    16,    19,    26,
+      27,     0,     4,     8,    17,    18,    20,    21,    22,    25,
+       9,    28,    28,    16,    19,    26,    27,     5,     7,    23,
+      24,    18,    21,     9,     6,    24
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,     6,     7,     8,     8,     9,    10,    10,    11
+       0,    13,    14,    15,    15,    15,    15,    15,    15,    15,
+      15,    16,    17,    17,    18,    19,    20,    20,    21,    21,
+      22,    23,    23,    24,    25,    26,    27,    28,    28
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     2,     1,     2,     2,     1,     2,     1
+       0,     2,     2,     1,     2,     1,     2,     1,     2,     1,
+       2,     2,     1,     2,     1,     2,     1,     2,     1,     1,
+       2,     1,     2,     2,     2,     2,     2,     1,     2
 };
 
 
@@ -1205,49 +1242,169 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 18 "yaml_to_json.y" /* yacc.c:1646  */
-    { printf("{ \n%s\n}\n",(yyvsp[0].atributo)); }
-#line 1211 "y.tab.c" /* yacc.c:1646  */
+#line 22 "yaml_to_json.y" /* yacc.c:1646  */
+    { printf("{\n\t %s \n}\n",(yyvsp[0].atributo));/* ISTO PÕE O PRIMEIRO E ÚLTIMO {} */ }
+#line 1248 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 20 "yaml_to_json.y" /* yacc.c:1646  */
+#line 25 "yaml_to_json.y" /* yacc.c:1646  */
     {(yyval.atributo) =(yyvsp[0].atributo);}
-#line 1217 "y.tab.c" /* yacc.c:1646  */
+#line 1254 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 21 "yaml_to_json.y" /* yacc.c:1646  */
+#line 26 "yaml_to_json.y" /* yacc.c:1646  */
     {asprintf(&(yyval.atributo),"%s\n%s",(yyvsp[-1].atributo),(yyvsp[0].atributo));}
-#line 1223 "y.tab.c" /* yacc.c:1646  */
+#line 1260 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 25 "yaml_to_json.y" /* yacc.c:1646  */
-    {asprintf(&(yyval.atributo), "%s: [\n  %s\n],",(yyvsp[-1].key),(yyvsp[0].atributo));}
-#line 1229 "y.tab.c" /* yacc.c:1646  */
+#line 27 "yaml_to_json.y" /* yacc.c:1646  */
+    {(yyval.atributo)=(yyvsp[0].atributo);}
+#line 1266 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 28 "yaml_to_json.y" /* yacc.c:1646  */
-    {(yyval.atributo)=(yyvsp[0].atributo);}
-#line 1235 "y.tab.c" /* yacc.c:1646  */
+    {asprintf(&(yyval.atributo),"%s,\n%s",(yyvsp[-1].atributo),(yyvsp[0].atributo));}
+#line 1272 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
 #line 29 "yaml_to_json.y" /* yacc.c:1646  */
-    {asprintf(&(yyval.atributo),"%s,\n %s",(yyvsp[-1].atributo),(yyvsp[0].atributo));}
-#line 1241 "y.tab.c" /* yacc.c:1646  */
+    {(yyval.atributo)=(yyvsp[0].value);}
+#line 1278 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
+#line 30 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.atributo),"%s,\n%s",(yyvsp[-1].atributo),(yyvsp[0].value));}
+#line 1284 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 9:
+#line 31 "yaml_to_json.y" /* yacc.c:1646  */
+    {(yyval.atributo)=(yyvsp[0].value);}
+#line 1290 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 10:
 #line 32 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.atributo),"%s,\n%s",(yyvsp[-1].atributo),(yyvsp[0].value));}
+#line 1296 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 11:
+#line 36 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.atributo),"\"%s\": [\n  %s \n],",(yyvsp[-1].key),(yyvsp[0].atributo));}
+#line 1302 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 12:
+#line 39 "yaml_to_json.y" /* yacc.c:1646  */
     {(yyval.atributo)=(yyvsp[0].atributo);}
-#line 1247 "y.tab.c" /* yacc.c:1646  */
+#line 1308 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 13:
+#line 40 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.atributo),"\"%s\",\n \"%s\"",(yyvsp[-1].atributo),(yyvsp[0].atributo));}
+#line 1314 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 14:
+#line 43 "yaml_to_json.y" /* yacc.c:1646  */
+    {(yyval.atributo)=(yyvsp[0].atributo);}
+#line 1320 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 15:
+#line 46 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.atributo),"\"%s\":{\n%s\n}",(yyvsp[-1].key),(yyvsp[0].value));}
+#line 1326 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 16:
+#line 50 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"%s",(yyvsp[0].value));}
+#line 1332 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 17:
+#line 51 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"%s,\n%s",(yyvsp[-1].value),(yyvsp[0].value));}
+#line 1338 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 18:
+#line 54 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"%s",(yyvsp[0].value));}
+#line 1344 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 19:
+#line 55 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"%s",(yyvsp[0].atributo));}
+#line 1350 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 20:
+#line 59 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.atributo),"\t\"%s\": [\n\t%s\n]",(yyvsp[-1].key),(yyvsp[0].atributo));}
+#line 1356 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 21:
+#line 64 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.atributo),"%s",(yyvsp[0].value));}
+#line 1362 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 22:
+#line 65 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.atributo),"%s,\n%s",(yyvsp[-1].atributo),(yyvsp[0].value));}
+#line 1368 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 23:
+#line 68 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"{\n\t\"%s\":\"%s\"\n}",(yyvsp[-1].key),(yyvsp[0].value));}
+#line 1374 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 24:
+#line 75 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"\t\"%s\":\"%s\"",(yyvsp[-1].key),(yyvsp[0].value));}
+#line 1380 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 25:
+#line 78 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"\"%s\":\"%s\"",(yyvsp[-1].key),(yyvsp[0].value));}
+#line 1386 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 26:
+#line 80 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"\"%s\":\"%s\",",(yyvsp[-1].key),(yyvsp[0].value));}
+#line 1392 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 27:
+#line 84 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"%s",(yyvsp[0].value));}
+#line 1398 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 28:
+#line 85 "yaml_to_json.y" /* yacc.c:1646  */
+    {asprintf(&(yyval.value),"%s%s",(yyvsp[-1].value),(yyvsp[0].value));}
+#line 1404 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1251 "y.tab.c" /* yacc.c:1646  */
+#line 1408 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1475,10 +1632,11 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 34 "yaml_to_json.y" /* yacc.c:1906  */
+#line 87 "yaml_to_json.y" /* yacc.c:1906  */
 
     #include "lex.yy.c"
-      int main(){
+
+    int main(){
       yyparse();
       return 0;
    }
