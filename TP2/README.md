@@ -20,7 +20,3 @@ NOTA:
                             make clean-Y
         - Para limpar todos os outputs e executáveis:
                             make clean
-
-
-Último passo:
-    HAVE FUN 😎😎😎
