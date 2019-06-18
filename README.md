@@ -9,6 +9,6 @@ PL - Processamento de linguagens
         Gawk
     
     3º Trabalho prático:
-        Yacc
+        Yacc/Flex (Gramática Tradutora)
         
   
