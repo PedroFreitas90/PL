@@ -9,7 +9,7 @@
 		make run
 Para correr todos os processadores. Os outputs irão estar na pasta outputs/
 
--Fazer:
+- Fazer:
 		make processador-Y
 onde Y pertence aos seguintes valores: a b c d, para correr apenas um processedor em específico. O output também irá estar na pasta outputs/
 
