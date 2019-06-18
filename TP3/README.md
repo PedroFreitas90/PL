@@ -16,7 +16,3 @@ NOTA:
     Como limpar?
         - Para limpar todos os outputs, executáveis e ficheiros gerados da compilação:
                             make clean
-
-
-Último passo:
-    HAVE FUN 😎😎😎
