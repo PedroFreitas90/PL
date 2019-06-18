@@ -23,7 +23,3 @@ NOTA:
                             make clean-exY
         - Para limpar todos os outputs e executáveis:
                             make clean
-
-
-Último passo:
-    HAVE FUN 😎😎😎
